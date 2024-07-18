@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 17,
     width: '100%',
     height: '100%',
     elevation: 3,

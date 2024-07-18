@@ -15,7 +15,7 @@ const Login = ({navigation}) => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -33,7 +33,7 @@ const Login = ({navigation}) => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
 
 
     let loginBtnObj = {
-        bgColor: 'black',
+        bgColor: '#1e1e1e',
         textColor: 'white',
         width: 320,
         height: 50,
@@ -61,7 +61,7 @@ const Login = ({navigation}) => {
         <SafeAreaView style={styles.container}>
 
             <Animatable.View
-                animation='zoomIn'
+                animation='flipInX'
                 duration={1000}
                 easing='ease-in'
                 iterationCount={1}

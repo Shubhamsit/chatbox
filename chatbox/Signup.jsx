@@ -19,7 +19,7 @@ const Login = () => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -36,7 +36,7 @@ const Login = () => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -54,7 +54,7 @@ const Login = () => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -72,7 +72,7 @@ const Login = () => {
         width: 320,
         height: 50,
         borderRadius: 10,
-        borderColor: 'black',
+        borderColor: '#3c3c3c',
         borderWidth: 3,
         backgroundColor: "white",
         textAlign: 'left',
@@ -87,7 +87,7 @@ const Login = () => {
 
 
     let loginBtnObj = {
-        bgColor: 'black',
+        bgColor: '#1e1e1e',
         textColor: 'white',
         width: 320,
         height: 50,
@@ -100,8 +100,9 @@ const Login = () => {
         <SafeAreaView style={styles.container}>
 
             <Animatable.View
-                animation='zoomIn'
-                duration={1000}
+                // animation='zoomIn'
+                animation='flipInY'
+                duration={1500}
                 easing='ease-in'
                 iterationCount={1}
                 style={styles.logoContainer}
