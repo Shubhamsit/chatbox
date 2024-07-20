@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const RoundedButton = ({ btnObj}) => {
+const RoundedButton = ({ btnObj,onPressFunction}) => {
   const { bgColor, text, width, height, logo,textColor } = btnObj;
  
   return (
@@ -10,7 +10,7 @@ const RoundedButton = ({ btnObj}) => {
 
 
 
-      <TouchableOpacity onPress={() => { }} style={[styles.btnContainer,{backgroundColor:bgColor}]}>
+      <TouchableOpacity onPress={onPressFunction} style={[styles.btnContainer,{backgroundColor:bgColor}]}>
         <View>
           <Text style={[styles.btnText,{color:textColor}]}>{logo} {text}</Text>
         </View>

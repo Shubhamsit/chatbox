@@ -1,36 +1,15 @@
 import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import * as Animatable from 'react-native-animatable';
-import TextInputBox from './reusableComponents/TextInputBox'
-import RoundedButton from './reusableComponents/RoundedButton';
+import TextInputBox from '../reusableComponents/TextInputBox'
+import RoundedButton from '../reusableComponents/RoundedButton';
 
-const Login = () => {
+const Login = ({ navigation }) => {
 
 
     const [mobile, setMobile] = useState('');
+
     const [password, setPassword] = useState('');
-    const [username, setUserName] = useState('');
-    const [confPassword, setConfPassword] = useState();
-
-
-
-
-    let inputUserNameProps = {
-        width: 320,
-        height: 50,
-        borderRadius: 10,
-        borderColor: '#3c3c3c',
-        borderWidth: 3,
-        backgroundColor: "white",
-        textAlign: 'left',
-        fontSize: 15,
-        fontWeight: '200',
-        placeholder: 'Username',
-        secureTextEntry: false,
-        keyboardType: 'default',
-        placeholderTextColor: "grey",
-
-    }
 
     let inputMobileProps = {
         width: 320,
@@ -68,30 +47,12 @@ const Login = () => {
     }
 
 
-    let inputConfPasswordProps = {
-        width: 320,
-        height: 50,
-        borderRadius: 10,
-        borderColor: '#3c3c3c',
-        borderWidth: 3,
-        backgroundColor: "white",
-        textAlign: 'left',
-        fontSize: 15,
-        fontWeight: '200',
-        placeholder: 'Confirm Password',
-        secureTextEntry: true,
-        keyboardType: 'default',
-        placeholderTextColor: "grey",
-
-    }
-
-
     let loginBtnObj = {
         bgColor: '#1e1e1e',
         textColor: 'white',
         width: 320,
         height: 50,
-        text: 'Register',
+        text: 'Login ',
         logo: ''
     }
 
@@ -100,15 +61,14 @@ const Login = () => {
         <SafeAreaView style={styles.container}>
 
             <Animatable.View
-                // animation='zoomIn'
-                animation='flipInY'
-                duration={1500}
+                animation='flipInX'
+                duration={1000}
                 easing='ease-in'
                 iterationCount={1}
                 style={styles.logoContainer}
             >
                 <Image
-                    source={require('./assets/chatlogo.png')}
+                    source={require('../assets/chatlogo.png')}
                     style={styles.logo}
                 />
                 <Text style={styles.logoText}>Chatbox</Text>
@@ -118,21 +78,10 @@ const Login = () => {
 
                 <View style={{ marginBottom: 20, }}>
 
-                    <TextInputBox textInputProps={inputUserNameProps} value={username} setValue={setUserName} />
-
-
-                </View>
-
-
-                <View style={{ marginBottom: 20, }}>
-
                     <TextInputBox textInputProps={inputMobileProps} value={mobile} setValue={setMobile} />
 
 
                 </View>
-
-
-
 
 
                 <View style={{ marginBottom: 20, }}>
@@ -142,25 +91,22 @@ const Login = () => {
 
                 </View>
 
-
-                <View style={{ marginBottom: 20, }}>
-
-                    <TextInputBox textInputProps={inputConfPasswordProps} value={confPassword} setValue={setConfPassword} />
-
-
-                </View>
-
                 <View style={{ top: 10, }}>
-                    <RoundedButton btnObj={loginBtnObj} />
+                    <RoundedButton btnObj={loginBtnObj} onPressFunction={()=>navigation.navigate('bottomtabs')} />
 
                 </View>
 
                 <View style={styles.registerText}>
 
 
-                    <TouchableOpacity>
+                    <Text style={{ color: 'grey' }}>DONT HAVE AN ACCOUNT   </Text>
 
-                        <Text style={{ color: 'grey' }}>Terms and Conditions</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('bottomtabs')}>
+
+                        <Text style={{ color: 'black' }}>Register</Text>
+
+
+
 
 
 
@@ -198,7 +144,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'coloumn',
         alignItems: 'center',
-        top: 70,
+        top: 100,
 
 
 
@@ -219,7 +165,7 @@ const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
         backgroundColor: 'white',
-        top: '13%',
+        top: '20%',
         alignItems: 'center',
 
 

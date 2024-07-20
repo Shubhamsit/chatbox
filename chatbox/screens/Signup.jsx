@@ -1,15 +1,36 @@
 import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import * as Animatable from 'react-native-animatable';
-import TextInputBox from './reusableComponents/TextInputBox'
-import RoundedButton from './reusableComponents/RoundedButton';
+import TextInputBox from '../reusableComponents/TextInputBox'
+import RoundedButton from '../reusableComponents/RoundedButton';
 
-const Login = ({navigation}) => {
+const Login = () => {
 
 
     const [mobile, setMobile] = useState('');
-
     const [password, setPassword] = useState('');
+    const [username, setUserName] = useState('');
+    const [confPassword, setConfPassword] = useState();
+
+
+
+
+    let inputUserNameProps = {
+        width: 320,
+        height: 50,
+        borderRadius: 10,
+        borderColor: '#3c3c3c',
+        borderWidth: 3,
+        backgroundColor: "white",
+        textAlign: 'left',
+        fontSize: 15,
+        fontWeight: '200',
+        placeholder: 'Username',
+        secureTextEntry: false,
+        keyboardType: 'default',
+        placeholderTextColor: "grey",
+
+    }
 
     let inputMobileProps = {
         width: 320,
@@ -47,12 +68,30 @@ const Login = ({navigation}) => {
     }
 
 
+    let inputConfPasswordProps = {
+        width: 320,
+        height: 50,
+        borderRadius: 10,
+        borderColor: '#3c3c3c',
+        borderWidth: 3,
+        backgroundColor: "white",
+        textAlign: 'left',
+        fontSize: 15,
+        fontWeight: '200',
+        placeholder: 'Confirm Password',
+        secureTextEntry: true,
+        keyboardType: 'default',
+        placeholderTextColor: "grey",
+
+    }
+
+
     let loginBtnObj = {
         bgColor: '#1e1e1e',
         textColor: 'white',
         width: 320,
         height: 50,
-        text: 'Login ',
+        text: 'Register',
         logo: ''
     }
 
@@ -61,14 +100,15 @@ const Login = ({navigation}) => {
         <SafeAreaView style={styles.container}>
 
             <Animatable.View
-                animation='flipInX'
-                duration={1000}
+                // animation='zoomIn'
+                animation='flipInY'
+                duration={1500}
                 easing='ease-in'
                 iterationCount={1}
                 style={styles.logoContainer}
             >
                 <Image
-                    source={require('./assets/chatlogo.png')}
+                    source={require('../assets/chatlogo.png')}
                     style={styles.logo}
                 />
                 <Text style={styles.logoText}>Chatbox</Text>
@@ -76,7 +116,15 @@ const Login = ({navigation}) => {
 
             <View style={styles.loginContainer}>
 
-                <View style={{marginBottom:20,}}>
+                <View style={{ marginBottom: 20, }}>
+
+                    <TextInputBox textInputProps={inputUserNameProps} value={username} setValue={setUserName} />
+
+
+                </View>
+
+
+                <View style={{ marginBottom: 20, }}>
 
                     <TextInputBox textInputProps={inputMobileProps} value={mobile} setValue={setMobile} />
 
@@ -84,14 +132,25 @@ const Login = ({navigation}) => {
                 </View>
 
 
-                <View style={{marginBottom:20,}}>
+
+
+
+                <View style={{ marginBottom: 20, }}>
 
                     <TextInputBox textInputProps={inputPasswordProps} value={password} setValue={setPassword} />
 
 
                 </View>
 
-                <View style={{top:10,}}>
+
+                <View style={{ marginBottom: 20, }}>
+
+                    <TextInputBox textInputProps={inputConfPasswordProps} value={confPassword} setValue={setConfPassword} />
+
+
+                </View>
+
+                <View style={{ top: 10, }}>
                     <RoundedButton btnObj={loginBtnObj} />
 
                 </View>
@@ -99,14 +158,9 @@ const Login = ({navigation}) => {
                 <View style={styles.registerText}>
 
 
-                    <Text>DONT HAVE AN ACCOUNT   </Text>
+                    <TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('signup')}>
-
-                        <Text style={{ color: 'grey' }}>Register</Text>
-                     
-
-                    
+                        <Text style={{ color: 'grey' }}>Terms and Conditions</Text>
 
 
 
@@ -144,7 +198,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'coloumn',
         alignItems: 'center',
-        top: 100,
+        top: 70,
 
 
 
@@ -165,7 +219,7 @@ const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
         backgroundColor: 'white',
-        top: '20%',
+        top: '13%',
         alignItems: 'center',
 
 
@@ -173,7 +227,7 @@ const styles = StyleSheet.create({
     },
     registerText: {
         flexDirection: 'row',
-        top:50,
+        top: 50,
 
     }
 })

@@ -29,7 +29,7 @@ const SplashScreen = ({ navigation }) => {
         style={styles.logoContainer}
       >
         <Image
-          source={require('./assets/chatlogo.png')}
+          source={require('../assets/chatlogo.png')}
           style={styles.logo}
         />
       </Animatable.View>
