@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState('https://png.pngtree.com/png-clipart/20220124/original/pngtree-avatar-girl-png-image_7193675.png');
@@ -9,8 +10,26 @@ const ProfileScreen = ({ navigation }) => {
   const [about, setAbout] = useState('Live in the moment');
   const [phoneNumber, setPhoneNumber] = useState('123-456-7890');
 
+
+const removeToken=async()=>{
+
+  try {
+   await AsyncStorage.removeItem('userToken');
+   console.log("token removed");
+   navigation.replace('login')
+    
+  } catch (error) {
+    console.log("failed to remove token");
+    
+  }
+}
+
+
   const handleLogout = () => {
-    // Implement your logout logic here
+
+    removeToken();
+    
+    
     Alert.alert("Logged out", "You have been logged out.");
   };
 

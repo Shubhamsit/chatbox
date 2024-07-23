@@ -3,13 +3,68 @@ import React, { useState } from 'react'
 import * as Animatable from 'react-native-animatable';
 import TextInputBox from '../reusableComponents/TextInputBox'
 import RoundedButton from '../reusableComponents/RoundedButton';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Login = ({ navigation }) => {
+    console.log("inside login");
 
 
     const [mobile, setMobile] = useState('');
 
     const [password, setPassword] = useState('');
+
+
+
+    const storeToken = async (token) => {
+        try {
+          await AsyncStorage.setItem('userToken', token);
+        } catch (e) {
+          console.error('Failed to save token.', e);
+        }
+      };
+
+
+
+    const handleLoginSubmit= async()=>{
+
+        console.log("yaha tak pahucha");
+
+        try {
+            const config={
+
+                headers:{"content-type": "application/json",},
+
+            }
+
+            const {data} =await axios.post("http://192.168.83.1:4000/api/user/login",{mobile,password},config)
+
+        console.log(data);
+
+        if(data.sucess)
+        {
+            storeToken(data.token);
+            console.log("token stord in  local storage");
+            navigation.replace("bottomtabs")
+        }
+        else{
+            console.log("not logedin");
+        }
+
+
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+
+
+    }
+
+
+
+
 
     let inputMobileProps = {
         width: 320,
@@ -92,7 +147,7 @@ const Login = ({ navigation }) => {
                 </View>
 
                 <View style={{ top: 10, }}>
-                    <RoundedButton btnObj={loginBtnObj} onPressFunction={()=>navigation.navigate('bottomtabs')} />
+                    <RoundedButton btnObj={loginBtnObj} onPressFunction={handleLoginSubmit }/>
 
                 </View>
 
@@ -101,7 +156,7 @@ const Login = ({ navigation }) => {
 
                     <Text style={{ color: 'grey' }}>DONT HAVE AN ACCOUNT   </Text>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('bottomtabs')}>
+                    <TouchableOpacity onPress={() => navigation.replace('signup')}>
 
                         <Text style={{ color: 'black' }}>Register</Text>
 
@@ -131,7 +186,7 @@ export default Login
 const styles = StyleSheet.create({
 
     topContainer: {
-        backgroundColor: 'yellow',
+        backgroundColor: '#EEFFF5',
     },
     logo: {
         width: 100,
@@ -139,7 +194,7 @@ const styles = StyleSheet.create({
 
     },
     logoContainer: {
-        backgroundColor: 'white',
+        backgroundColor: '#EEFFF5',
         flexDirection: 'row',
         justifyContent: 'center',
         flexDirection: 'coloumn',
@@ -153,7 +208,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 30,
         top: 40,
-        backgroundColor: 'white'
+        backgroundColor: '#EEFFF5'
     },
     logoText: {
         fontSize: 30,
@@ -164,7 +219,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#EEFFF5',
         top: '20%',
         alignItems: 'center',
 

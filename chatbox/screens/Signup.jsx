@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import TextInputBox from '../reusableComponents/TextInputBox'
 import RoundedButton from '../reusableComponents/RoundedButton';
 
-const Login = () => {
+const Login = ({navigation}) => {
 
 
     const [mobile, setMobile] = useState('');
@@ -21,14 +21,14 @@ const Login = () => {
         borderRadius: 10,
         borderColor: '#3c3c3c',
         borderWidth: 3,
-        backgroundColor: "white",
+        backgroundColor: "#E1EBEE",
         textAlign: 'left',
         fontSize: 15,
         fontWeight: '200',
         placeholder: 'Username',
         secureTextEntry: false,
         keyboardType: 'default',
-        placeholderTextColor: "grey",
+        placeholderTextColor: "black",
 
     }
 
@@ -38,14 +38,14 @@ const Login = () => {
         borderRadius: 10,
         borderColor: '#3c3c3c',
         borderWidth: 3,
-        backgroundColor: "white",
+        backgroundColor: "#E1EBEE",
         textAlign: 'left',
         fontSize: 15,
         fontWeight: '200',
         placeholder: 'Mobile Number',
         secureTextEntry: false,
         keyboardType: 'phone-pad',
-        placeholderTextColor: "grey",
+        placeholderTextColor: "black",
 
     }
 
@@ -56,14 +56,14 @@ const Login = () => {
         borderRadius: 10,
         borderColor: '#3c3c3c',
         borderWidth: 3,
-        backgroundColor: "white",
+        backgroundColor: "#E1EBEE",
         textAlign: 'left',
         fontSize: 15,
         fontWeight: '200',
         placeholder: 'Password',
         secureTextEntry: true,
         keyboardType: 'default',
-        placeholderTextColor: "grey",
+        placeholderTextColor: "black",
 
     }
 
@@ -74,14 +74,14 @@ const Login = () => {
         borderRadius: 10,
         borderColor: '#3c3c3c',
         borderWidth: 3,
-        backgroundColor: "white",
+        backgroundColor: "#E1EBEE",
         textAlign: 'left',
         fontSize: 15,
         fontWeight: '200',
         placeholder: 'Confirm Password',
         secureTextEntry: true,
         keyboardType: 'default',
-        placeholderTextColor: "grey",
+        placeholderTextColor: "black",
 
     }
 
@@ -151,7 +151,7 @@ const Login = () => {
                 </View>
 
                 <View style={{ top: 10, }}>
-                    <RoundedButton btnObj={loginBtnObj} />
+                    <RoundedButton btnObj={loginBtnObj}  onPressFunction={()=>navigation.navigate('login')} />
 
                 </View>
 
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
 
     },
     logoContainer: {
-        backgroundColor: 'white',
+        backgroundColor: '#D8FFEC',
         flexDirection: 'row',
         justifyContent: 'center',
         flexDirection: 'coloumn',
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 30,
         top: 40,
-        backgroundColor: 'white'
+        backgroundColor: '#D8FFEC'
     },
     logoText: {
         fontSize: 30,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#D8FFEC',
         top: '13%',
         alignItems: 'center',
 
