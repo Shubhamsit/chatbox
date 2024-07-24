@@ -1,86 +1,53 @@
-### HTTP (HYPER TEXT TRANSFER PROTOCOL)
+# HTTP Overview
 
-```
+## HTTP Headers
+Headers are metadata used to convey additional information about the request or response.
 
-1. HEADERS ->  METADATA (KEY VALUE PAIRS)
-  headers req, res dono me milenge
+### Types of Headers
+- **Request Headers**: Sent from the client.
+- **Response Headers**: Sent from the server.
+- **Representation Headers**: Related to the encoding or compression of the data.
+- **Payload Headers**: Contain the actual data.
 
-  2. types of headers  
-  
-#1.  request headers  -> from client
-#2  response headers => fromserver
-#3 representation headers => encoding /compression
+### Common Headers
+- **Accept**: Specifies the media types the client can process (e.g., `Accept: application/json`).
+- **User-Agent**: Identifies the client software (e.g., `User-Agent: Postman`).
+- **Authorization**: Contains credentials for authentication (e.g., `Authorization: Bearer <token>`).
+- **Content-Type**: Indicates the media type of the resource being sent (e.g., `Content-Type: image/jpeg`).
+- **Cookies**: Contains cookies from the client.
+- **Cache-Control**: Directs caching mechanisms (e.g., `Cache-Control: no-cache`).
 
-#4 payload header => data
+## HTTP Methods
+- **GET**: Retrieve a resource.
+- **HEAD**: Retrieve headers only (no message body).
+- **OPTIONS**: Query the server for available operations.
+- **TRACE**: Perform a diagnostic trace of the request.
+- **DELETE**: Remove a resource.
+- **PUT**: Replace a resource (full replacement).
+- **PATCH**: Update a part of a resource.
+- **POST**: Submit data to be processed.
 
-```
+## HTTP Status Codes
 
-### most common Headers 
-```
-#1. Accept : application/json ( ye batata hai ki sever kon sa data accept karega )
+### 1xx (Informational)
+- **100 Continue**: Initial part of a request has been received.
+- **102 Processing**: Processing is ongoing.
 
-#2. User : Agent ( ye batata hai kon si application se data aaaay h like postman, borowser info etc )
+### 2xx (Success)
+- **200 OK**: The request succeeded.
+- **201 Created**: A resource has been created.
+- **202 Accepted**: The request has been accepted for processing.
 
-#3 Authorisation : Bearer jwttoken   ( for authorisation token)
+### 3xx (Redirection)
+- **307 Temporary Redirect**: The request should be repeated with another URL temporarily.
+- **308 Permanent Redirect**: The resource has been permanently moved to a new URL.
 
-#4 Content: Type ( kon si type ka data bhej rahe ho like image, pdf etc)
+### 4xx (Client Error)
+- **400 Bad Request**: The request could not be understood by the server.
+- **401 Unauthorized**: Authentication is required and has failed or has not been provided.
+- **402 Payment Required**: Reserved for future use.
+- **404 Not Found**: The requested resource could not be found.
 
-#5 cookies:
-
-#6 cache: Control 
-
-```
-
-### HTTP METHODS  (BASIC SET OF OPERATION THAT CAN PE USED TO INTERACT WITH SERVER)
-
-```
-GET: retrieve a resource 
-HEAD: No message body (response headers only)
-OPTIONS: what operations are avilable 
-TRACE: for testing (get some data)
-DELETE: remove a resource 
-PUT: replace a resource (whole)
-PATCH: change a particular part of resource 
-POST: interact with resource (basically add)
-
-```
-
-
-
-### HTTP STATUS CODE 
-
-```
-. 1** -> INFORMATION
-
-. 2** -> SUCCESS
-
-. 3** -> REDIRECTION
-
-. 4** -> CLIENT ERROR 
-
-. 5** -> SERVER ERROR
-
-```
-
-
-
-```
-100 -> CONTINUE
-102 -> PROCESING
-200-> OK
-201 -> CREATED 
-202-> ACCEPTED 
-307-> TEMP REDIRECT
-308 -> PERMANENT REDIRECT
-
-400 -> BAD REQUEST
-401->UNAUTHORISED 
-402 -> PAYMENT REQUIRED
-404 -> NOT FOUND
-
-500-> INTERNAL SERVER ERROR 
-504-> GATEWAY TIMEOUT
-
-
-
-````
+### 5xx (Server Error)
+- **500 Internal Server Error**: The server encountered an error and could not complete the request.
+- **504 Gateway Timeout**: The server did not receive a timely response from an upstream server.
