@@ -22,6 +22,12 @@ const userModel=mongoose.Schema({
         type:String,
     
         default: 'https://plus.unsplash.com/premium_photo-1673448391005-d65e815bd026?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
+    },
+    about:{
+        type:String,
+        required:false,
+        default: "busy",
+
     }
 
 },
@@ -53,11 +59,11 @@ else{
 } );
 
 
-userModel.methods.isPasswordCorrect= async function(password)
-{
-return await bcrypt.compare(password,this.password);
+// userModel.methods.isPasswordCorrect= async function(password)
+// {
+// return await bcrypt.compare(password,this.password);
 
-}
+// }
 
 const User=mongoose.model("User",userModel);
 export default User;

@@ -22,9 +22,6 @@ app.use(express.static("public")) // assts like images which is basically static
 
 app.use(cookieParser());
 
-
-
-
 app.use('/api/user',userRoutes)
 
 app.use(notFound);
