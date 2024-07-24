@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
             };
 
             const { data } = await axios.post(
-                "http://192.168.83.1:4000/api/user/login",
+                "http://192.168.83.1:4000/api/users/login",
                 { mobile, password },
                 config
             );

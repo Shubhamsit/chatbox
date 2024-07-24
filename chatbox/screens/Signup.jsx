@@ -101,7 +101,7 @@ const Login = ({ navigation }) => {
                 };
 
                 const { data } = await axios.post(
-                    "http://192.168.83.1:4000/api/user/",
+                    "http://192.168.83.1:4000/api/users/register",
                     { mobile, password, username },
                     config
                 );

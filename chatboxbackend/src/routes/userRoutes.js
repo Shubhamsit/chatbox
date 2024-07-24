@@ -1,13 +1,13 @@
 import express from 'express'
 const router=express.Router();
-import {registerUser,authUser,jwtVerify,userInfo} from '../controllers/userControllers.js'
+import {registerUser,authUser,jwtVerify,userInfo,allUsers,sendFriendRequest} from '../controllers/userControllers.js'
 import upload from '../middlewares/multerMiddleware.js';
 import jwtAuthMiddleware from '../middlewares/jwtAuthMiddleware.js';
 // import { jwtVerify } from '../controllers/userControllers.js';
 
 
 
-router.route('/').post(
+router.route('/register').post(
 
     
     upload.fields([
@@ -24,6 +24,9 @@ router.route('/').post(
 router.post('/login',authUser)
 router.get('/jwt',jwtAuthMiddleware,jwtVerify);
 router.get('/info/:userId',userInfo);
+router.get('/allusers/:userId',allUsers)
+router.post('/addfriend',sendFriendRequest)
+
 
 
 export default router;

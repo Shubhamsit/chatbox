@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState,} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext();
@@ -6,7 +6,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {

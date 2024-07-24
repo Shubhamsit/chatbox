@@ -33,7 +33,7 @@ const ProfileScreen = ({ navigation }) => {
   const userInfo = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.83.1:4000/api/user/info/${userId}`
+        `http://192.168.83.1:4000/api/users/info/${userId}`
       );
       console.log(response.data, "profile ka data ", response.data.username);
       setName(response.data.username);

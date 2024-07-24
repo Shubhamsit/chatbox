@@ -33,7 +33,7 @@ const SplashScreen = ({ navigation }) => {
       try {
 
 
-        const response = await axios.get("http://192.168.83.1:4000/api/user/jwt", config)
+        const response = await axios.get("http://192.168.83.1:4000/api/users/jwt", config)
 
         console.log(response.data.sucess);
         if (response.data.sucess) {

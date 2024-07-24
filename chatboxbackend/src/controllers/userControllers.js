@@ -4,6 +4,7 @@ import generateToken from "../config/generateToken.js";
 import { ApiError } from "../utils/apiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import bcrypt from "bcryptjs";
+import mongoose from 'mongoose';
 
 let defaultAvtar =
   "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?t=st=1721719015~exp=1721719615~hmac=9192e8c58734ad20528a67941cac06c031665557758ff57f429129fe434ac0ec";
@@ -126,4 +127,61 @@ const userInfo = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, authUser, jwtVerify, userInfo };
+const allUsers = asyncHandler(async (req, res) => {
+  try {
+    const requestedUserId = req.params.userId;
+    const user = await User.findById(requestedUserId).populate(
+      "friends",
+      "_id"
+    );
+    const excludedUserIds = user.friends.map((friend) => friend._id);
+    excludedUserIds.push(requestedUserId);
+    const users = await User.find({ _id: { $nin: excludedUserIds } });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log(error.message);
+  }
+});
+
+
+const sendFriendRequest = asyncHandler(async (req, res) => {
+    try {
+      const { friendId, userId } = req.body;
+  
+      // Validate ObjectIds
+      if (!mongoose.Types.ObjectId.isValid(friendId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid userId or friendId" });
+      }
+  
+      const user = await User.findById(friendId);
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Check if the friend request already exists
+      if (user.requests.some(request => request.from.toString() === userId)) {
+        return res.status(400).json({ message: "Friend request already sent" });
+      }
+  
+      user.requests.push({ from: userId });
+      await user.save();
+  
+      res.status(200).json({ message: "Friend request sent successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to add friend request" });
+    }
+  });
+  
+
+
+export {
+  registerUser,
+  authUser,
+  jwtVerify,
+  userInfo,
+  allUsers,
+  sendFriendRequest,
+};

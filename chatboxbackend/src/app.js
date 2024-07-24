@@ -22,19 +22,10 @@ app.use(express.static("public")) // assts like images which is basically static
 
 app.use(cookieParser());
 
-app.use('/api/user',userRoutes)
+app.use('/api/users',userRoutes)
 
 app.use(notFound);
 app.use(errorHandler)
-
-
-app.get('/',(req,res)=>{
-
-  res.send("shubhamfhfh");
-})
-
-
-
 
 
 

@@ -1,36 +1,87 @@
-
-import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, SafeAreaView } from 'react-native';
-import { Avatar, FAB, IconButton, Snackbar } from 'react-native-paper';
-
-const data = [
-  { id: '1', name: 'SAI', message: 'tera nam', image: 'https://i.pravatar.cc/50?img=1' },
-  { id: '2', name: 'shubham', message: 'hdhw', image: 'https://i.pravatar.cc/50?img=2' },
-  { id: '3', name: 'tushar', message: 'hgjhh', image: 'https://i.pravatar.cc/50?img=3' },
-  { id: '4', name: 'antri', message: 'Moneyy', image: 'https://i.pravatar.cc/50?img=4' },
-  { id: '5', name: 'kush', message: 'hlww', image: 'https://i.pravatar.cc/50?img=5' },
-];
+import React, { useState, useContext, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import { Avatar, FAB, IconButton, Snackbar } from "react-native-paper";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 const HomeScreen = ({ navigation }) => {
+  const { userId } = useContext(AuthContext);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [requestsSent, setRequestsSent] = useState({});
+  const [data, setData] = useState();
+  const [friendId, setFriendId] = useState();
+
+  const fetchAllUser = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.83.1:4000/api/users/allusers/${userId}`
+      );
+      //  console.log(response.data);
+
+      setData(response.data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllUser();
+  }, []);
 
 
-  const handlePress = (id) => {
-    setRequestsSent((prev) => ({ ...prev, [id]: true }));
-    setSnackbarVisible(true);
+
+
+  const addToFriend = async () => {
+    try {
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+        },
+      };
+      const response = await axios.post("http://192.168.83.1:4000/api/users/addfriend", {
+       friendId,
+        userId
+      }
+      );
+
+      console.log(response); // Log the response data
+      Alert.alert("shubham")
+
+    } catch (error) {
+      console.log(error.response.data); // Log any error that occurs
+    }
   };
 
 
 
+
+  const handlePress = (_id) => {
+
+    setFriendId(_id);
+    addToFriend(friendId);
+
+    setRequestsSent((prev) => ({ ...prev, [_id]: true }));
+    setSnackbarVisible(true);
+    console.log(requestsSent, "shubham");
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Avatar.Image size={50} source={{ uri: item.image }} />
+      <Avatar.Image size={50} source={{ uri: item.avtar }} />
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.message}>{item.message}</Text>
+        <Text style={styles.name}>{item.username}</Text>
+        <Text style={styles.message}>{item.about}</Text>
       </View>
-      {requestsSent[item.id] ? (
+      {requestsSent[item._id] ? (
         <IconButton
           icon="check"
           color="#1A3636"
@@ -43,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
           icon="plus"
           color="black"
           size={30}
-          onPress={() => handlePress(item.id)}
+          onPress={() => handlePress(item._id)}
         />
       )}
     </View>
@@ -51,10 +102,9 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={renderItem}
       />
 
@@ -74,35 +124,35 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 
   itemContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderBottomColor: "#ccc",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   textContainer: {
     flex: 1,
     marginLeft: 15,
   },
   name: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   message: {
-    color: '#666',
+    color: "#666",
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 16,
     right: 1,
     bottom: 0,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   checkIcon: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
 });

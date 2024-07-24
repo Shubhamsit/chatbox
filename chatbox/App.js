@@ -43,11 +43,12 @@ const AppNavigator = () => {
           title: "Chat List",
           headerLeft: () => null,
           headerRight: () => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={fetchAllUsers}>
               <Ionicons
                 name="person-add-sharp"
                 style={{ fontSize: 25, marginRight: 30, color: "white" }}
               />
+              
             </TouchableOpacity>
           ),
           headerStyle: {
