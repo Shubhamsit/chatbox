@@ -4,7 +4,7 @@ import generateToken from "../config/generateToken.js";
 import { ApiError } from "../utils/apiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import bcrypt from "bcryptjs";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 let defaultAvtar =
   "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?t=st=1721719015~exp=1721719615~hmac=9192e8c58734ad20528a67941cac06c031665557758ff57f429129fe434ac0ec";
@@ -135,8 +135,11 @@ const allUsers = asyncHandler(async (req, res) => {
       "_id"
     );
     const excludedUserIds = user.friends.map((friend) => friend._id);
-    excludedUserIds.push(requestedUserId);
-    const users = await User.find({ _id: { $nin: excludedUserIds } });
+    const userRequests = await User.findById(requestedUserId, "requests");
+    const excludedRequestIds=userRequests.requests.map((requester)=>requester.from)
+
+    const allExcludedIds = [...new Set([...excludedUserIds, ...excludedRequestIds,requestedUserId])];
+    const users = await User.find({ _id: { $nin: allExcludedIds } });
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -144,37 +147,145 @@ const allUsers = asyncHandler(async (req, res) => {
   }
 });
 
-
 const sendFriendRequest = asyncHandler(async (req, res) => {
-    try {
-      const { friendId, userId } = req.body;
-  
-      // Validate ObjectIds
-      if (!mongoose.Types.ObjectId.isValid(friendId) || !mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400).json({ message: "Invalid userId or friendId" });
-      }
-  
-      const user = await User.findById(friendId);
-  
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      // Check if the friend request already exists
-      if (user.requests.some(request => request.from.toString() === userId)) {
-        return res.status(400).json({ message: "Friend request already sent" });
-      }
-  
-      user.requests.push({ from: userId });
-      await user.save();
-  
-      res.status(200).json({ message: "Friend request sent successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Failed to add friend request" });
+  try {
+    const { friendId, userId } = req.body;
+
+    // Validate ObjectIds
+    if (
+      !mongoose.Types.ObjectId.isValid(friendId) ||
+      !mongoose.Types.ObjectId.isValid(userId)
+    ) {
+      return res.status(400).json({ message: "Invalid userId or friendId" });
     }
-  });
+
+    const user = await User.findById(friendId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the friend request already exists
+    if (user.requests.some((request) => request.from.toString() === userId)) {
+      return res.status(400).json({ message: "Friend request already sent" });
+    }
+
+    user.requests.push({ from: userId });
+    await user.save();
+
+    res.status(200).json({ message: "Friend request sent successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to add friend request" });
+  }
+});
+
+const friendRequests = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId).populate(
+      "requests.from",
+      " username  avtar about"
+    );
+    console.log(user);
+    res.status(200).json(user.requests);
+  } catch (error) {
+    res.status(500).json({ message: "cant get requests" });
+  }
+});
+
+const RespondFriendRequest = asyncHandler(async (req, res) => {
+
+  console.log("inseide respond friend");
+  try {
+
+    console.log(req.body);
+    const { userId, requesterId, status } = req.body;
+
+    console.log(userId,requesterId,status);
+
+    if (status == true) {
+      // Add each user to the other's friends list
+      await User.updateOne(
+        { _id: userId },
+        { $addToSet: { friends: requesterId } }
+      );
+
+      await User.updateOne(
+        { _id: requesterId },
+        { $addToSet: { friends: userId } }
+      );
+
+      // Remove the request from the user's requests array
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { requests: { from: requesterId } } }
+      );
+
+      console.log("Friend request accepted and updated successfully");
+      res.status(200).json({ message: "Request Accepted" });
+    }  if (status == false) {
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { requests: { from: requesterId } } }
+      );
+      res.status(200).json({ message: "Request Declined" });
+    }
+  }
   
+  
+  
+  
+  catch (error) {
+
+
+    console.log(error);
+    res.status(500).json({message:"Error while updating reqests"})
+  }
+
+
+
+});
+
+
+
+const sendChatList=asyncHandler(async(req,res)=>{
+
+
+  try {
+
+    const userId=req.params;
+    console.log(userId);
+    console.log(userId,"hdshubhahsaswsaiiiiiiiiii");
+
+    const user=await User.findById(userId.userId).populate("friends",'username avtar about')
+res.status(200).json(user.friends);
+console.log(user);
+
+
+
+
+
+
+
+    
+  } catch (error) {
+
+
+    console.log(error);
+    
+  }
+
+
+
+
+
+})
+
+
+
+
 
 
 export {
@@ -184,4 +295,7 @@ export {
   userInfo,
   allUsers,
   sendFriendRequest,
+  friendRequests,
+  RespondFriendRequest,
+  sendChatList
 };

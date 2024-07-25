@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,71 +7,60 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
-import { Avatar, FAB, IconButton, Snackbar } from "react-native-paper";
+import { Avatar, IconButton, Snackbar } from "react-native-paper";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = ({ navigation }) => {
   const { userId } = useContext(AuthContext);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [requestsSent, setRequestsSent] = useState({});
-  const [data, setData] = useState();
-  const [friendId, setFriendId] = useState();
+  const [data, setData] = useState([]);
+  const [friendId, setFriendId] = useState(null);
 
-  const fetchAllUser = async () => {
+  const fetchAllUser = useCallback(async () => {
     try {
       const response = await axios.get(
         `http://192.168.83.1:4000/api/users/allusers/${userId}`
       );
-      //  console.log(response.data);
-
       setData(response.data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  useEffect(() => {
-    fetchAllUser();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllUser();
+    }, [fetchAllUser])
+  );
 
-
+  useEffect(() => {
+    if (friendId) {
+      addToFriend();
+    }
+  }, [friendId]);
 
   const addToFriend = async () => {
     try {
-
-      const config = {
-        headers: {
-          "content-type": "application/json",
-        },
-      };
-      const response = await axios.post("http://192.168.83.1:4000/api/users/addfriend", {
-       friendId,
-        userId
-      }
+      const response = await axios.post(
+        "http://192.168.83.1:4000/api/users/addfriend",
+        {
+          friendId,
+          userId,
+        }
       );
-
-      console.log(response); // Log the response data
-      Alert.alert("shubham")
-
+      Alert.alert(response.data.message);
     } catch (error) {
-      console.log(error.response.data); // Log any error that occurs
+      Alert.alert(error.response?.data?.message || "An error occurred");
     }
   };
 
-
-
-
   const handlePress = (_id) => {
-
     setFriendId(_id);
-    addToFriend(friendId);
-
     setRequestsSent((prev) => ({ ...prev, [_id]: true }));
     setSnackbarVisible(true);
-    console.log(requestsSent, "shubham");
   };
 
   const renderItem = ({ item }) => (
@@ -87,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
           color="#1A3636"
           size={30}
           style={styles.checkIcon}
-          onPress={() => { }}
+          onPress={() => handlePress(item._id)}
         />
       ) : (
         <IconButton
@@ -126,7 +115,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
   itemContainer: {
     flexDirection: "row",
     padding: 15,
@@ -144,13 +132,6 @@ const styles = StyleSheet.create({
   },
   message: {
     color: "#666",
-  },
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 1,
-    bottom: 0,
-    backgroundColor: "#000",
   },
   checkIcon: {
     backgroundColor: "transparent",
