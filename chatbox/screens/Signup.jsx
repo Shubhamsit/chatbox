@@ -11,6 +11,9 @@ import * as Animatable from "react-native-animatable";
 import TextInputBox from "../reusableComponents/TextInputBox";
 import RoundedButton from "../reusableComponents/RoundedButton";
 import axios from "axios";
+import Constants from 'expo-constants';
+
+const { extra } = Constants.expoConfig;
 
 const Login = ({ navigation }) => {
     const [mobile, setMobile] = useState("");
@@ -101,7 +104,7 @@ const Login = ({ navigation }) => {
                 };
 
                 const { data } = await axios.post(
-                    "http://192.168.83.1:4000/api/users/register",
+                    `http://${extra.IP}:4000/api/users/register`,
                     { mobile, password, username },
                     config
                 );

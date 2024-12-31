@@ -10,6 +10,9 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
+import Constants from 'expo-constants';
+
+const { extra } = Constants.expoConfig;
 
 const RequestScreen = () => {
 
@@ -24,7 +27,7 @@ const RequestScreen = () => {
 
       console.log(status,"status from fetch friend request");
       const response = await axios.get(
-        `http://192.168.83.1:4000/api/users/requests/${userId}`
+        `http://${extra.IP}:4000/api/users/requests/${userId}`
       );
 
       setUserRequest(response.data);
@@ -51,7 +54,7 @@ const RequestScreen = () => {
       console.log(status,"status");
 
       const response = await axios.post(
-        "http://192.168.83.1:4000/api/users/respondrequest",
+        `http://${extra.IP}:4000/api/users/respondrequest`,
         { userId, requesterId, status },
         config
       );

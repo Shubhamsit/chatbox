@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { StatusBar, View, Text, TouchableOpacity, StyleSheet, FlatList, Image, SafeAreaView } from 'react-native';
+import Constants from 'expo-constants';
 
+const { extra } = Constants.expoConfig;
 import axios from 'axios';
 import { AuthContext } from '../AuthContext';
 import { useScrollToTop } from '@react-navigation/native';
@@ -13,43 +15,20 @@ const ChatListScreen = ({ navigation }) => {
 
 
 
-  // const fetchAllChatList = async () => {
-  //   try {
-
-  //     console.log(userId);
-  //     const response = await axios.get(
-  //       `http://192.168.83.1:4000/api/users/chatlist/${userId}`
-  //     );
-  //     setChatList(response.data);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const fetchAllChatList = useCallback(async () => {
     try {
       console.log(userId);
       const response = await axios.get(
-        `http://192.168.83.1:4000/api/users/chatlist/${userId}`
+        `http://${extra.IP}:4000/api/users/chatlist/${userId}`
       );
       setChatList(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   }, [userId])
 
-  // useEffect(()=>{
-
-
-  //   fetchAllChatList();
-
-
-
-
-
-  // },[userId])
+ 
 
 
   useFocusEffect(
@@ -69,7 +48,7 @@ const ChatListScreen = ({ navigation }) => {
       );
     }
     return (
-      <TouchableOpacity style={styles.chatContainer} onPress={() => navigation.navigate('chatscreen')}>
+      <TouchableOpacity style={styles.chatContainer} onPress={() => navigation.navigate('chatscreen',{item})}>
         <Image source={{ uri: item.avtar }} style={styles.avatar} />
         <View style={styles.chatDetails}>
           <Text style={styles.chatName}>{item.username}</Text>
@@ -115,6 +94,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ECECEC',
+    
+   
   },
   avatar: {
     width: 50,

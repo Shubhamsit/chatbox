@@ -11,6 +11,9 @@ import { Avatar, IconButton, Snackbar } from "react-native-paper";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
+import Constants from 'expo-constants';
+
+const { extra } = Constants.expoConfig;
 
 const HomeScreen = ({ navigation }) => {
   const { userId } = useContext(AuthContext);
@@ -22,7 +25,7 @@ const HomeScreen = ({ navigation }) => {
   const fetchAllUser = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://192.168.83.1:4000/api/users/allusers/${userId}`
+        `http://${extra.IP}:4000/api/users/allusers/${userId}`
       );
       setData(response.data);
     } catch (error) {
@@ -45,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
   const addToFriend = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.83.1:4000/api/users/addfriend",
+        `http://${extra.IP}:4000/api/users/addfriend`,
         {
           friendId,
           userId,

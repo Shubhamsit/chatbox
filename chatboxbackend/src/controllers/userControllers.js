@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
       avtarUrl = avtar.url;
       console.log(avtarUrl);
     } catch (error) {
-      throw new ApiError(400, "upload filed on cloudinary");
+      throw new ApiError(400, "upload failed on cloudinary");
     }
   }
 
@@ -68,12 +68,12 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const authUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const { mobile, password } = req.body;
 
   const user = await User.findOne({ mobile });
-  console.log(user);
+  // console.log(user);
 
   if (!user) {
     res.status(400).json({ message: "user not found" });
@@ -97,7 +97,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 const jwtVerify = asyncHandler(async (req, res) => {
   console.log("inside ");
-  console.log(req.user);
+  // console.log(req.user);
   console.log(req.status);
 
   if (req.status == true) {
@@ -121,7 +121,7 @@ const userInfo = asyncHandler(async (req, res) => {
       avtar: user.avtar,
     });
   } catch (error) {
-    res.ststus(500).json({
+    res.status(500).json({
       message: "error while fetching user fro database",
     });
   }
@@ -252,15 +252,23 @@ const RespondFriendRequest = asyncHandler(async (req, res) => {
 
 const sendChatList=asyncHandler(async(req,res)=>{
 
-
   try {
 
     const userId=req.params;
+    console.log("bhai chatList me");
+    
     console.log(userId);
-    console.log(userId,"hdshubhahsaswsaiiiiiiiiii");
+
+
 
     const user=await User.findById(userId.userId).populate("friends",'username avtar about')
 res.status(200).json(user.friends);
+
+
+
+
+
+
 console.log(user);
 
 

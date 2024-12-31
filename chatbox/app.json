@@ -4,6 +4,9 @@
     "slug": "chatbox",
     "version": "1.0.0",
     "orientation": "portrait",
+    "extra": {
+      "IP": "192.168.90.1"
+    },
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true

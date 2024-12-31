@@ -3,6 +3,9 @@ import { View, StyleSheet, Image } from "react-native";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Constants from 'expo-constants';
+
+const { extra } = Constants.expoConfig;
 
 const SplashScreen = ({ navigation }) => {
   const getToken = async () => {
@@ -25,13 +28,17 @@ const SplashScreen = ({ navigation }) => {
       };
 
       try {
+
+        console.log(extra.IP);
+      
+        
         const response = await axios.get(
-          "http://192.168.83.1:4000/api/users/jwt",
+          `http://${extra.IP}:4000/api/users/jwt`,
           config
         );
 
         console.log(response.data.sucess);
-        if (response.data.sucess) {
+        if (!response.data.sucess) {
           navigation.replace("bottomtabs");
         } else {
           navigation.replace("login");
@@ -39,8 +46,8 @@ const SplashScreen = ({ navigation }) => {
       } catch (error) {
         console.log(error.message);
         console.error("Error response data:", error.response.data.sucess);
-        // console.error("Error response status:", error.response.status);
-        // console.error("Error response headers:", error.response.headers);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
         navigation.replace("login");
       }
     } else {

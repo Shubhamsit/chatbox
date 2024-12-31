@@ -14,6 +14,9 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
+import Constants from 'expo-constants';
+
+const { extra } = Constants.expoConfig;
 
 const ProfileScreen = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState();
@@ -33,7 +36,7 @@ const ProfileScreen = ({ navigation }) => {
   const userInfo = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.83.1:4000/api/users/info/${userId}`
+        `http://${extra.IP}:4000/api/users/info/${userId}`
       );
       console.log(response.data, "profile ka data ", response.data.username);
       setName(response.data.username);

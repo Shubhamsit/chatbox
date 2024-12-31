@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect,useContext } from "react";
 import {
     View,
     Text,
@@ -25,10 +25,21 @@ import {
 import EmojiSelector from "react-native-emoji-selector";
 import { Chat } from "./Chat";
 import { stick } from '../assert.js'
+import { AuthContext } from "../AuthContext";
+import {socket} from '../socket.js'
 
 
 
-const ChatScreen = () => {
+
+const ChatScreen = ({route}) => {
+    // console.log("yaha pahucha bhai chatscreen mke ");
+    
+
+    const { item } = route.params;
+    // console.log("my item",item);
+    
+
+    const { userId} = useContext(AuthContext);
 
 
     const flatListRef = useRef(null);
@@ -37,32 +48,134 @@ const ChatScreen = () => {
         flatListRef.current?.scrollToEnd({ animated: true });
     });
 
-    const dummyData = {
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMxAUhf0gMOYVfgoYXhdi2WOv58JEyMMdjWw&s",
-        name: "Angel Priya",
-    };
+   
 
     const [showEmojiSelector, setShowEmojiSelector] = useState(false);
     const [message, setMessage] = useState("");
     const [chatData, setChatData] = useState(Chat);
     const [showStickers, setShowStickers] = useState(false);
     const [backgroundColor, setBackgroundColor] = useState("#f0f0f0");
+    const[name,setName]=useState(item.username);
+    const[image,setImage]=useState(item.avtar);
+
+
+
+
+    // const sendMessage = () => {
+
+    //     const newMessage = { sender: userId, reciever:item._id, text: message };
+    //     socket.emit('private-message',newMessage); // Send message to server
+    //     setMessage('');
+    //   };
+
+
+
+    // const handleSendMessage = () => {
+    //     if (message.trim().length > 0) {
+    //         const newMessage = {
+    //             id: (chatData.length + 1).toString(),
+    //             message,
+    //             timestamp: new Date().toLocaleTimeString([], {
+    //                 hour: "2-digit",
+    //                 minute: "2-digit",
+    //             }),
+    //             sender: "me",
+    //         };
+    //         setChatData([...chatData, newMessage]);
+    //         setMessage("");
+    //     }
+    // };
+    // useEffect(() => {
+    //     socket.connect();
+
+
+        
+    //   }, []);
+
+
+      useEffect(() => {
+        socket.connect();
+
+       
+
+
+        
+      }, );
+
+
+
+      socket.on('recieve-private-message',(data)=>{
+
+        console.log("recieve me aaya");
+        
+   
+
+        console.log("mera messsage",data);
+        
+        setChatData((previousChatData)=>[...previousChatData,data])
+  
+      })
+
+
+
+
 
     const handleSendMessage = () => {
+
         if (message.trim().length > 0) {
             const newMessage = {
                 id: (chatData.length + 1).toString(),
-                message,
-                timestamp: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
-                sender: "me",
+                text:message,
+                sender: userId,
+                reciever:item._id
             };
-            setChatData([...chatData, newMessage]);
+
+            // const newMessage={
+            //     sender:userId,
+            //     reciever:item._id,
+            //     text:"hello behan"
+
+
+            // }
+// console.log("----------------------------------");
+
+//             console.log("before",newMessage);
+//             console.log(newMessage.reciever);
+//             console.log(newMessage.sender);
+// console.log("-------------------------------------------------------");
+            
+            // setChatData([...chatData, newMessage]);
+            socket.emit('private-message',newMessage); // Send message to server
             setMessage("");
         }
     };
+
+
+
+
+
+    // const handleSendSticker = (sticker) => {
+    //     const newMessage = {
+    //         id: (chatData.length + 1).toString(),
+    //         message: (
+    //             <Image
+    //                 source={sticker}
+    //                 style={{ width: 100, height: 100, resizeMode: "contain" }}
+    //             />
+    //         ),
+    //         timestamp: new Date().toLocaleTimeString([], {
+    //             hour: "2-digit",
+    //             minute: "2-digit",
+    //         }),
+    //         sender: "me",
+    //     };
+    //     setChatData([...chatData, newMessage]);
+    //     setShowStickers(false);
+    // };
+
+
+
+
 
     const handleSendSticker = (sticker) => {
         const newMessage = {
@@ -73,15 +186,22 @@ const ChatScreen = () => {
                     style={{ width: 100, height: 100, resizeMode: "contain" }}
                 />
             ),
-            timestamp: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-            }),
-            sender: "me",
+            sender:userId,
+            reciever:item._id
         };
         setChatData([...chatData, newMessage]);
         setShowStickers(false);
     };
+
+
+
+
+
+
+
+
+
+
 
     const toggleEmojiKeyboard = () => {
         setShowEmojiSelector((prev) => !prev);
@@ -145,11 +265,11 @@ const ChatScreen = () => {
                             <TouchableOpacity style={styles.iconPadding}>
                                 <Ionicons name="arrow-back" size={24} color="white" />
                             </TouchableOpacity>
-                            <Image style={styles.dp} source={{ uri: dummyData.img }} />
+                            <Image style={styles.dp} source={{ uri: image }} />
                             <Text style={styles.name}>
-                                {dummyData.name.length <= 15
-                                    ? dummyData.name
-                                    : dummyData.name.substring(0, 15) + "..."}
+                                {name.length <= 15
+                                    ? name
+                                    : name.substring(0, 15) + "..."}
                             </Text>
                         </View>
 
